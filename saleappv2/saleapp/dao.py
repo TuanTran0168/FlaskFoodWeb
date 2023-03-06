@@ -94,3 +94,5 @@ if __name__ == '__main__':
     from saleapp import app
     with app.app_context():
         print(count_product_by_cate())
+
+        print()
