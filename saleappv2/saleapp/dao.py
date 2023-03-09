@@ -35,9 +35,9 @@ def get_user_by_id(user_id):
     return User.query.get(user_id)
 
 
-def register(name, username, password, avatar):
+def register(name, username, password,  phonenumber,  avatar):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    u = User(name=name, username=username.strip(), password=password, image=avatar)
+    u = User(name=name, username=username.strip(), password=password,  phonenumber =  phonenumber, image=avatar)
     db.session.add(u)
     db.session.commit()
 
@@ -94,3 +94,5 @@ if __name__ == '__main__':
     from saleapp import app
     with app.app_context():
         print(count_product_by_cate())
+
+        print()

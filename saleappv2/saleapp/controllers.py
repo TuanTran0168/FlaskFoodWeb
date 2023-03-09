@@ -44,6 +44,7 @@ def register():
                 dao.register(name=request.form['name'],
                              username=request.form['username'],
                              password=password,
+                             phonenumber = request.form['numPhone'],
                              avatar=avatar)
 
                 return redirect('/login')
