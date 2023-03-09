@@ -31,7 +31,7 @@ div.product-container {
 }
 
 div.header_img {
-    width: 50px !important;
+    width: 100px;
 }
 
 div.header_img img {
@@ -40,9 +40,6 @@ div.header_img img {
     cursor: pointer;
 }
 
-div.carousel {
-
-}
 
 div.container-layout-full {
     background: green;
@@ -52,6 +49,7 @@ nav.navbar {
     background: black;
     height: 80px;
 }
+
 
 .navbar-nav {
     align-items: center
@@ -200,6 +198,7 @@ div.footer-inner-right > div > div {
 div.footer-inner-right > div > div > p {
     margin: 3% 5%;
 }
+
 
 
 
