@@ -1,8 +1,15 @@
+from builtins import print
+
+from cryptography.fernet import Fernet
+
 from saleapp.models import Category, Product, User, Receipt, ReceiptDetails, Comment
 from flask_login import current_user
 from sqlalchemy import func
 from saleapp import db
 import hashlib
+from saleapp import security
+from saleapp.security import caesar_encrypt, caesar_decrypt, MY_KEY
+from saleapp.security import giai_ma_AES, ma_hoa_AES
 
 
 def load_categories():
@@ -37,6 +44,12 @@ def get_user_by_id(user_id):
 
 def register(name, username, password,  phonenumber,  avatar):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+
+    # fernet = Fernet(MY_KEY)
+    # phonenumber = str(phonenumber).encode()
+    # phonenumber = fernet.encrypt(phonenumber)
+    phonenumber = ma_hoa_AES(phonenumber, MY_KEY)
+
     u = User(name=name, username=username.strip(), password=password,  phonenumber =  phonenumber, image=avatar)
     db.session.add(u)
     db.session.commit()
@@ -93,6 +106,20 @@ def save_comment(content, product_id):
 if __name__ == '__main__':
     from saleapp import app
     with app.app_context():
-        print(count_product_by_cate())
 
-        print()
+        # str = "gAAAAABkDW_rMPN42xeXpXAC2DuoJrf4BVF88sScGGLb30wzv1rGIuwbP9p-zBFyqYJf6D8KNQccy7zG_6iB6mfhpjFCo_IGNw=="
+        # fernet = Fernet(MY_KEY)
+        # print(fernet.decrypt(str).decode())
+        #
+        # text = "gAAAAABkDXL1btg8ONK2FiitGIV2ZvLLKqo1NlwRNf7NPWWPu2_cbenMRphX9GtLlawvrflYtMnwwhSo3tywLch8ZAAA2bvfSw=="
+        # print(giai_ma_AES(text, MY_KEY))
+
+        str = "HELLO XIN CHÀO MỌI NGƯỜI, NGÀY MẤY MÌNH NỘP BÀI NÀY VẬY"
+
+        str_ma_hoa = ma_hoa_AES(str, MY_KEY)
+        print(str_ma_hoa)
+
+        print(giai_ma_AES(str_ma_hoa, MY_KEY))
+
+
+
