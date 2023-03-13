@@ -1,4 +1,8 @@
 from flask import render_template, request, redirect, session, jsonify
+from flask_wtf import FlaskForm, RecaptchaField
+from flask_wtf.recaptcha import validators
+from select import error
+
 from saleapp import app, dao, admin, login, utils
 from flask_login import login_user, logout_user, login_required
 from saleapp.decorators import annonymous_user
@@ -58,18 +62,25 @@ def register():
 
 @annonymous_user
 def login_my_user():
+    form = ContactForm()
+    err_msg = ""
     if request.method.__eq__('POST'):
-        username = request.form['username']
-        password = request.form['password']
+        if request.form.get('g-recaptcha-response'):
+            username = request.form['username']
+            password = request.form['password']
 
-        user = dao.auth_user(username=username, password=password)
-        if user:
-            login_user(user=user)
+            user = dao.auth_user(username=username, password=password)
+            if user:
+                login_user(user=user)
 
-            n = request.args.get("next")
-            return redirect(n if n else '/')
+                n = request.args.get("next")
+                return redirect(n if n else '/')
+            else:
+                err_msg = "Sai tài khoản hoặc mật khẩu!"
+        else:
+            err_msg = "Vui lòng xác minh mình là con người!"
 
-    return render_template('login.html')
+    return render_template('login.html', form = form, err_msg=err_msg)
 
 
 def logout_my_user():
@@ -197,3 +208,5 @@ def add_comment(product_id):
         }
     })
 
+class ContactForm(FlaskForm):
+    recaptcha = RecaptchaField(validators=[validators.Recaptcha(message='Invalid reCAPTCHA.')])

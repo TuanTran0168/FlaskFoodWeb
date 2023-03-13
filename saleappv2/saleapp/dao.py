@@ -1,15 +1,17 @@
 from builtins import print
+from random import random
 
 from cryptography.fernet import Fernet
+from twilio.rest import Client
 
 from saleapp.models import Category, Product, User, Receipt, ReceiptDetails, Comment
 from flask_login import current_user
 from sqlalchemy import func
 from saleapp import db
 import hashlib
-from saleapp import security
 from saleapp.security import caesar_encrypt, caesar_decrypt, MY_KEY
 from saleapp.security import giai_ma_AES, ma_hoa_AES
+from saleapp.security import send_OTP
 
 
 def load_categories():
@@ -120,6 +122,25 @@ if __name__ == '__main__':
         print(str_ma_hoa)
 
         print(giai_ma_AES(str_ma_hoa, MY_KEY))
+
+        account_sid = 'AC99204c3540a27bd83aede03e43b83312'
+        auth_token = '6660059774e9c35882ef7e4fa354ec56'
+
+        account_sid = 'AC99204c3540a27bd83aede03e43b83312'
+        auth_token = 'b82932d6b2ff01b12fee7df26de98c2c'
+        messaging_service_sid = 'MGcebeadd059e80d3835f92442700abaaa'
+        phone_number = "+84345809638"
+        phone_number = "+84359505026"
+        message = "U là trời otp nè: "
+
+        print("BUG")
+        send_OTP(account_sid=account_sid, auth_token=auth_token,messaging_service_sid= messaging_service_sid, phone_number=phone_number, message=message)
+
+        print("BUG 1")
+
+        #captcha
+        key = "6Leih_gkAAAAACZQmAtE8i3C3hjKBC7NbN1Jy27d"
+        sckey ="6Leih_gkAAAAAMN_3bNw8sBaC8lXtDSd-k_-VePg"
 
 
 
