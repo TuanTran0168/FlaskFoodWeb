@@ -82,7 +82,6 @@ def caesar_decrypt(ciphertext, shift):
 # print('Giải mã số điện thoại:', decrypted_phone_number)
 
 
-
 #
 # # Tạo khóa bí mật ngẫu nhiên
 # # key = Fernet.generate_key()
@@ -110,7 +109,9 @@ def caesar_decrypt(ciphertext, shift):
 # print(MY_KEY)
 
 from cryptography.fernet import Fernet
+
 MY_KEY = b'ykWaetYMhda53pQkaSOjsDHLzousmpH0SUUH6ul-TJM='
+
 
 def ma_hoa_AES(text, key):
     fernet = Fernet(key)
@@ -118,7 +119,22 @@ def ma_hoa_AES(text, key):
     text_encrypt = fernet.encrypt(b_text)
     return text_encrypt
 
+
 def giai_ma_AES(text, key):
     fernet = Fernet(key)
     text_decrypt = fernet.decrypt(text).decode()
     return text_decrypt
+
+
+import random
+from twilio.rest import Client
+
+
+def send_OTP(account_sid, auth_token, messaging_service_sid, phone_number, message):
+    client = Client(account_sid, auth_token)
+    otp = random.randint(100000, 999999)
+    client.messages.create(
+        messaging_service_sid=messaging_service_sid,
+        body=message + str(otp),
+        to=phone_number
+    )
