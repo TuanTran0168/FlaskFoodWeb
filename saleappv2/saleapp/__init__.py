@@ -19,14 +19,21 @@ login = LoginManager(app=app)
 
 babel = Babel(app=app)
 
-site_key_V2 = "6Leih_gkAAAAACZQmAtE8i3C3hjKBC7NbN1Jy27d"
-secret_key_V2 ="6Leih_gkAAAAAMN_3bNw8sBaC8lXtDSd-k_-VePg"
+MY_AES_KEY = b'ykWaetYMhda53pQkaSOjsDHLzousmpH0SUUH6ul-TJM='
 
-site_key_V3 = "6LequfgkAAAAANl1Q3A-bKNvwLoGJcrqpfcQH7R4"
-secret_key_V3 ="6LequfgkAAAAABY-xRwg6c27dCD4dwZrGzodvw7x"
+SITE_KEY_V2 = "6Leih_gkAAAAACZQmAtE8i3C3hjKBC7NbN1Jy27d"
+SECRET_KEY_V2 ="6Leih_gkAAAAAMN_3bNw8sBaC8lXtDSd-k_-VePg"
 
-app.config['RECAPTCHA_PUBLIC_KEY'] = site_key_V3
-app.config['RECAPTCHA_PRIVATE_KEY'] = secret_key_V3
+SITE_KEY_V3 = "6LequfgkAAAAANl1Q3A-bKNvwLoGJcrqpfcQH7R4"
+SECRET_KEY_V3 ="6LequfgkAAAAABY-xRwg6c27dCD4dwZrGzodvw7x"
+
+app.config['RECAPTCHA_PUBLIC_KEY'] = SITE_KEY_V2
+app.config['RECAPTCHA_PRIVATE_KEY'] = SECRET_KEY_V2
+
+account_sid = 'AC99204c3540a27bd83aede03e43b83312'
+auth_token = '0aa01e87475a6428ebcd1b21f603619a' #key này lâu lâu twilio nó tự động thay đổi
+messaging_service_sid = 'MGcebeadd059e80d3835f92442700abaaa'
+message = "U là trời otp nè: "
 
 @babel.localeselector
 def load_locale():

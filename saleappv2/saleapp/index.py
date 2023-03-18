@@ -8,6 +8,8 @@ import cloudinary.uploader
 app.add_url_rule('/', 'index', controllers.index)
 app.add_url_rule('/products/<int:product_id>', 'product-detail', controllers.details)
 app.add_url_rule('/login-admin', 'login-admin', controllers.login_admin, methods=['post'])
+# app.add_url_rule('/confirmOTP', )
+app.add_url_rule('/confirmOTP', 'get_otp', controllers.get_otp, methods=['get', 'post'])
 app.add_url_rule('/register', 'register', controllers.register, methods=['get', 'post'])
 app.add_url_rule('/login', 'login-user', controllers.login_my_user, methods=['get', 'post'])
 app.add_url_rule('/logout', 'logout', controllers.logout_my_user)
@@ -19,6 +21,11 @@ app.add_url_rule('/api/pay', 'pay', controllers.pay)
 app.add_url_rule('/api/products/<product_id>/comments', 'comment-list', controllers.comments)
 app.add_url_rule('/api/products/<product_id>/comments', 'comment-add', controllers.add_comment, methods=['post'])
 
+# @app.route('/confirmOTP', methods = ['post', 'get'])
+# def get_otp():
+#     if request.method.__eq__('POST'):
+#         return redirect('/register')
+#     return render_template("confirmOTP.html")
 
 @app.context_processor
 def common_attr():

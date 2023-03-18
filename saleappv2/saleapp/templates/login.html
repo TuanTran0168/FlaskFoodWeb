@@ -7,7 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
 </head>
 
-<h1 class="text-center">ĐĂNG NHẬP NGƯỜI DÙNG</h1>
+<h1 class="text-center">ĐĂNG NHẬP</h1>
 
 {% if err_msg %}
 <div class="text-center alert alert-danger">
@@ -29,30 +29,30 @@
             <label for="password">Mật khẩu</label>
         </div>
 
-        <!--        <div>-->
-        <!--            {{ form.recaptcha }}-->
-        <!--        </div>-->
+        <div>
+            {{ form.recaptcha() }}
+        </div>
 
         <!--        <div style = "witdh: 300px; height: 100px; background: red" id = "demo-form">-->
 
         <!--        </div>-->
         <!-- Thêm hộp kiểm reCAPTCHA vào trang web của bạn -->
-        <div id="recaptcha-container"></div>
+        <!--        <div id="recaptcha-container"></div>-->
         <div>
-            <input type="submit" value="Đăng nhập V3" class="btn btn-danger g-recaptcha"
-                   data-sitekey="6LequfgkAAAAANl1Q3A-bKNvwLoGJcrqpfcQH7R4"
-                   data-callback='onSubmit'
-                   data-action='submit'/>
+            <!--            <input type="submit" value="Đăng nhập V3" class="btn btn-danger g-recaptcha"-->
+            <!--                   data-sitekey="6LequfgkAAAAANl1Q3A-bKNvwLoGJcrqpfcQH7R4"-->
+            <!--                   data-callback='onSubmit'-->
+            <!--                   data-action='submit'/>-->
 
-<!--            <input type="submit" value="Đăng nhập V3-2" class="btn btn-danger g-recaptcha"-->
-<!--                   data-sitekey="6LequfgkAAAAANl1Q3A-bKNvwLoGJcrqpfcQH7R4"-->
-<!--                   data-callback='onClick'-->
-<!--                   data-action='submit'/>-->
+            <!--            <input type="submit" value="Đăng nhập V3-2" class="btn btn-danger g-recaptcha"-->
+            <!--                   data-sitekey="6LequfgkAAAAANl1Q3A-bKNvwLoGJcrqpfcQH7R4"-->
+            <!--                   data-callback='onClick'-->
+            <!--                   data-action='submit'/>-->
 
-<!--            <input type="submit" value="Đăng nhập V3-099999" class="btn btn-danger g-recaptcha"-->
-<!--                   data-sitekey="6LequfgkAAAAANl1Q3A-bKNvwLoGJcrqpfcQH7R4"-->
-<!--                   data-callback='onSubmit'-->
-<!--                   data-action='homepage'/>-->
+            <!--            <input type="submit" value="Đăng nhập V3-099999" class="btn btn-danger g-recaptcha"-->
+            <!--                   data-sitekey="6LequfgkAAAAANl1Q3A-bKNvwLoGJcrqpfcQH7R4"-->
+            <!--                   data-callback='onSubmit'-->
+            <!--                   data-action='homepage'/>-->
 
             <input type="submit" value="Đăng nhập" class="btn btn-danger"/>
         </div>
