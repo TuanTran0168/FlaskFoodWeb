@@ -1,0 +1,28 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+<head>
+    <link href="{{ url_for('static', filename='css/register.css') }}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
+</head>
+
+<h1 class="text-center">OTP</h1>
+
+{% if err_msg %}
+<div class="text-center alert alert-danger">
+    {{err_msg}}
+</div>
+{% endif %}
+<div class="register-form">
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-floating mb-3 mt-3">
+            <input type="text" class="form-control" required id="numPhone" placeholder="Nhập họ tên" name="numPhone">
+            <label for="numPhone">Số điện thoại</label>
+        </div>
+        <div>
+            <input type="submit" value="Đăng ký" class="btn btn-danger"/>
+        </div>
+    </form>
+</div>
+{% endblock %}

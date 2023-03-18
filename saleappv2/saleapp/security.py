@@ -130,9 +130,9 @@ import random
 from twilio.rest import Client
 
 
-def send_OTP(account_sid, auth_token, messaging_service_sid, phone_number, message):
+def send_OTP(account_sid, auth_token, messaging_service_sid, otp, phone_number, message):
     client = Client(account_sid, auth_token)
-    otp = random.randint(100000, 999999)
+
     client.messages.create(
         messaging_service_sid=messaging_service_sid,
         body=message + str(otp),

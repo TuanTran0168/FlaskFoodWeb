@@ -1,12 +1,15 @@
 from flask import render_template, request, redirect, session, jsonify
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.recaptcha import validators
+from saleapp.security import send_OTP
 from select import error
 
-from saleapp import app, dao, admin, login, utils
+from saleapp import app, dao, admin, login, utils, account_sid, auth_token, messaging_service_sid, message
 from flask_login import login_user, logout_user, login_required
 from saleapp.decorators import annonymous_user
 import cloudinary.uploader
+from werkzeug.utils import redirect
+import random
 
 
 def index():
@@ -32,28 +35,48 @@ def login_admin():
 
     return redirect('/admin')
 
+otp = 0
+numPhoneVN = ""
+def get_otp():
+    if request.method.__eq__('POST'):
+        numPhone = request.form['numPhone']
+        numVN = "+84"
+        global numPhoneVN
+        numPhoneVN = numVN + numPhone[1: numPhone.__len__()]
+        global otp;
+        otp = random.randint(100000, 999999)
+        send_OTP(account_sid=account_sid, auth_token=auth_token, messaging_service_sid=messaging_service_sid ,otp=otp,
+                 message=message, phone_number=numPhoneVN)
+        return redirect('/register')
+
+    return render_template("confirmOTP.html")
 
 def register():
     err_msg = ''
     if request.method.__eq__('POST'):
         password = request.form['password']
         confirm = request.form['confirm']
+        confirm_otp = request.form['confirm_otp']
         if password.__eq__(confirm):
             avatar = ''
             if request.files:
                 res = cloudinary.uploader.upload(request.files['avatar'])
                 avatar = res['secure_url']
 
-            try:
-                dao.register(name=request.form['name'],
-                             username=request.form['username'],
-                             password=password,
-                             phonenumber = request.form['numPhone'],
-                             avatar=avatar)
+            if confirm_otp.__eq__(otp):
+                try:
+                    dao.register(name=request.form['name'],
+                                 username=request.form['username'],
+                                 password=password,
+                                 phonenumber=numPhoneVN,
+                                 avatar=avatar)
 
-                return redirect('/login')
-            except:
-                err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
+                    return redirect('/login')
+                    # return confirm_otp + otp
+                except:
+                    err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
+            else:
+                err_msg = "Mã OTP không chính xác!"
         else:
             err_msg = 'Mật khẩu KHÔNG khớp!'
 
@@ -210,3 +233,9 @@ def add_comment(product_id):
 
 class ContactForm(FlaskForm):
     recaptcha = RecaptchaField(validators=[validators.Recaptcha(message='Invalid reCAPTCHA.')])
+
+if __name__ == '__main__':
+    from saleapp import app
+    with app.app_context():
+        print(otp)
+        print()
