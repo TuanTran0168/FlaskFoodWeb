@@ -1,38 +1,54 @@
-from builtins import print
+# from builtins import print
+from cryptography.fernet import Fernet
+
+MY_AES_KEY = b'ykWaetYMhda53pQkaSOjsDHLzousmpH0SUUH6ul-TJM='
 
 
-def caesar_encrypt(plaintext, shift):
-    """
-    Mã hóa một chuỗi văn bản bằng thuật toán Caesar
-    với số đơn vị shift cho trước.
-    """
-    ciphertext = ""
-    for char in plaintext:
-        if char.isalpha():
-            # Mã hóa chữ cái
-            shifted_char = chr((ord(char) - 65 + shift) % 26 + 65)
-        else:
-            # Không mã hóa ký tự đặc biệt hoặc số
-            shifted_char = char
-        ciphertext += shifted_char
-    return ciphertext
+def ma_hoa_AES(text, key):
+    fernet = Fernet(key)
+    b_text = str(text).encode()
+    text_encrypt = fernet.encrypt(b_text).decode()
+    return text_encrypt #string
 
 
-def caesar_decrypt(ciphertext, shift):
-    """
-    Giải mã một chuỗi mã hóa bằng thuật toán Caesar
-    với số đơn vị shift cho trước.
-    """
-    plaintext = ""
-    for char in ciphertext:
-        if char.isalpha():
-            # Giải mã chữ cái
-            shifted_char = chr((ord(char) - 65 - shift) % 26 + 65)
-        else:
-            # Không giải mã ký tự đặc biệt hoặc số
-            shifted_char = char
-        plaintext += shifted_char
-    return plaintext
+def giai_ma_AES(text, key):
+    fernet = Fernet(key)
+    text_decrypt = fernet.decrypt(text).decode()
+    return text_decrypt #string
+
+
+# def caesar_encrypt(plaintext, shift):
+#     """
+#     Mã hóa một chuỗi văn bản bằng thuật toán Caesar
+#     với số đơn vị shift cho trước.
+#     """
+#     ciphertext = ""
+#     for char in plaintext:
+#         if char.isalpha():
+#             # Mã hóa chữ cái
+#             shifted_char = chr((ord(char) - 65 + shift) % 26 + 65)
+#         else:
+#             # Không mã hóa ký tự đặc biệt hoặc số
+#             shifted_char = char
+#         ciphertext += shifted_char
+#     return ciphertext
+#
+#
+# def caesar_decrypt(ciphertext, shift):
+#     """
+#     Giải mã một chuỗi mã hóa bằng thuật toán Caesar
+#     với số đơn vị shift cho trước.
+#     """
+#     plaintext = ""
+#     for char in ciphertext:
+#         if char.isalpha():
+#             # Giải mã chữ cái
+#             shifted_char = chr((ord(char) - 65 - shift) % 26 + 65)
+#         else:
+#             # Không giải mã ký tự đặc biệt hoặc số
+#             shifted_char = char
+#         plaintext += shifted_char
+#     return plaintext
 
 
 # from Crypto.Cipher import AES
@@ -108,22 +124,6 @@ def caesar_decrypt(ciphertext, shift):
 # print("Tin nhắn đã được giải mã:", decrypted_message)
 # print(MY_KEY)
 
-from cryptography.fernet import Fernet
-
-MY_AES_KEY = b'ykWaetYMhda53pQkaSOjsDHLzousmpH0SUUH6ul-TJM='
-
-
-def ma_hoa_AES(text, key):
-    fernet = Fernet(key)
-    b_text = str(text).encode()
-    text_encrypt = fernet.encrypt(b_text).decode()
-    return text_encrypt #string
-
-
-def giai_ma_AES(text, key):
-    fernet = Fernet(key)
-    text_decrypt = fernet.decrypt(text).decode()
-    return text_decrypt #string
 
 
 import random

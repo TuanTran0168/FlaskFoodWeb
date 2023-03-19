@@ -9,7 +9,7 @@ from twilio.rest import Client
 # from saleapp.security import send_OTP
 from select import error
 
-from saleapp import app, dao, admin, login, utils, account_sid, auth_token, messaging_service_sid, message
+from saleapp import app, dao, admin, login, utils, ACCOUNT_SID, AUTH_TOKEN, SERVICE_SID
 from flask_login import login_user, logout_user, login_required
 from saleapp.decorators import annonymous_user
 import cloudinary.uploader
@@ -109,22 +109,22 @@ numPhoneVN = ""
 #     return render_template('register.html', err_msg=err_msg)
 
 def send_otp(phone_num):
-    account_sid = 'AC99204c3540a27bd83aede03e43b83312'
-    auth_token = '6bc48bbceb5f69c56d77af1bd1e4b8f7'
+    account_sid = ACCOUNT_SID
+    auth_token = AUTH_TOKEN
     client = Client(account_sid, auth_token)
     verification = client.verify \
-        .services('VAe815928dddcd3ab7340649abcc495092') \
+        .services(SERVICE_SID) \
         .verifications \
         .create(to=phone_num, channel='sms')
     return verification
 
 
 def check_otp(phone_num, code):
-    account_sid = 'AC99204c3540a27bd83aede03e43b83312'
-    auth_token = '6bc48bbceb5f69c56d77af1bd1e4b8f7'
+    account_sid = ACCOUNT_SID
+    auth_token = AUTH_TOKEN
     client = Client(account_sid, auth_token)
     verification_check = client.verify \
-        .services('VAe815928dddcd3ab7340649abcc495092') \
+        .services(SERVICE_SID) \
         .verification_checks \
         .create(to=phone_num, code=code)
     return verification_check
@@ -143,16 +143,17 @@ def get_otp():
             check = dao.check_phone_number_by_sdt(numPhoneVN)
 
             if check:
-                try:
+                # try:
                     sotp = send_otp(numPhoneVN)
                     if sotp.status:
                         return redirect('/register')
-                except:
-                    err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
-                else:
-                    err_msg = "Vui lòng xác minh mình là con người!"
+                # except:
+                #     err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau! - 1'
+
             else:
                 err_msg = "Số điện thoại này đã được đăng ký!"
+        else:
+            err_msg = "Vui lòng xác minh mình là con người!"
 
     return render_template("confirmOTP.html", form=form, err_msg=err_msg)
 

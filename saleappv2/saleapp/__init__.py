@@ -30,10 +30,20 @@ SECRET_KEY_V3 ="6LequfgkAAAAABY-xRwg6c27dCD4dwZrGzodvw7x"
 app.config['RECAPTCHA_PUBLIC_KEY'] = SITE_KEY_V2
 app.config['RECAPTCHA_PRIVATE_KEY'] = SECRET_KEY_V2
 
-account_sid = 'AC99204c3540a27bd83aede03e43b83312'
-auth_token = '6bc48bbceb5f69c56d77af1bd1e4b8f7' #key này lâu lâu twilio nó tự động thay đổi
-messaging_service_sid = 'MGcebeadd059e80d3835f92442700abaaa'
-message = "U là trời otp nè: "
+# HIẾU
+ACCOUNT_SID = 'AC99204c3540a27bd83aede03e43b83312'
+AUTH_TOKEN = '6bc48bbceb5f69c56d77af1bd1e4b8f7'
+SERVICE_SID = 'VAe815928dddcd3ab7340649abcc495092'
+
+# THÁI
+ACCOUNT_SID = 'ACf8ff9e78fefda1261dd98b54970530c5'
+AUTH_TOKEN = 'e5076e5c6f314e19dc56442326dbf69b'
+SERVICE_SID = 'VAab73f1b83ab67aa2999c05582b3d22b5'
+
+# TUẤN
+# ACCOUNT_SID = 'ACb04b4c9fbcb0ca833a22416d555297ff'
+# AUTH_TOKEN = 'a39e20e969810aec428fd17e085a8303'
+# SERVICE_SID = 'VA0b119692923771c078df14bbecf6100c'
 
 @babel.localeselector
 def load_locale():

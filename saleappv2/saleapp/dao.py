@@ -9,7 +9,7 @@ from flask_login import current_user
 from sqlalchemy import func
 from saleapp import db
 import hashlib
-from saleapp.security import caesar_encrypt, caesar_decrypt, MY_AES_KEY
+from saleapp.security import MY_AES_KEY
 from saleapp.security import giai_ma_AES, ma_hoa_AES
 # from saleapp.security import send_OTP
 

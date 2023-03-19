@@ -106,17 +106,18 @@ if __name__ == '__main__':
         password = str(hashlib.md5('123456'.encode('utf-8')).hexdigest())
         phonenumber = ma_hoa_AES("+84359505026", MY_AES_KEY)
         phonenumber1 = ma_hoa_AES("+84345809638", MY_AES_KEY)
+        phonenumber2 = ma_hoa_AES("+8499999999", MY_AES_KEY)
 
         u = User(name='Tuấn Trần', username='admin', password=password,
                  user_role=UserRole.ADMIN, phonenumber = phonenumber,
                  image='https://res.cloudinary.com/dhwuwy0to/image/upload/v1678329949/Vinh_2_nybzzs.jpg')
 
-        u1 = User(name='Tuấn Trần 1', username='admin', password=password,
+        u1 = User(name='Tuấn Trần 1', username='admin1', password=password,
                  user_role=UserRole.USER, phonenumber=phonenumber1,
                  image='https://res.cloudinary.com/dhwuwy0to/image/upload/v1678329949/Vinh_2_nybzzs.jpg')
 
-        u2 = User(name='Tuấn Trần 2', username='admin', password=password,
-                 user_role=UserRole.USER, phonenumber=phonenumber1,
+        u2 = User(name='Tuấn Trần 2', username='admin2', password=password,
+                 user_role=UserRole.USER, phonenumber=phonenumber2,
                  image='https://res.cloudinary.com/dhwuwy0to/image/upload/v1678329949/Vinh_2_nybzzs.jpg')
         db.session.add_all([u, u1, u2])
         db.session.commit()
