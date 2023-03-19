@@ -31,7 +31,7 @@ app.config['RECAPTCHA_PUBLIC_KEY'] = SITE_KEY_V2
 app.config['RECAPTCHA_PRIVATE_KEY'] = SECRET_KEY_V2
 
 account_sid = 'AC99204c3540a27bd83aede03e43b83312'
-auth_token = '0aa01e87475a6428ebcd1b21f603619a' #key này lâu lâu twilio nó tự động thay đổi
+auth_token = '6bc48bbceb5f69c56d77af1bd1e4b8f7' #key này lâu lâu twilio nó tự động thay đổi
 messaging_service_sid = 'MGcebeadd059e80d3835f92442700abaaa'
 message = "U là trời otp nè: "
 
