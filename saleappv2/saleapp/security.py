@@ -116,25 +116,25 @@ MY_AES_KEY = b'ykWaetYMhda53pQkaSOjsDHLzousmpH0SUUH6ul-TJM='
 def ma_hoa_AES(text, key):
     fernet = Fernet(key)
     b_text = str(text).encode()
-    text_encrypt = fernet.encrypt(b_text)
-    return text_encrypt
+    text_encrypt = fernet.encrypt(b_text).decode()
+    return text_encrypt #string
 
 
 def giai_ma_AES(text, key):
     fernet = Fernet(key)
     text_decrypt = fernet.decrypt(text).decode()
-    return text_decrypt
+    return text_decrypt #string
 
 
 import random
 from twilio.rest import Client
 
 
-def send_OTP(account_sid, auth_token, messaging_service_sid, otp, phone_number, message):
-    client = Client(account_sid, auth_token)
-
-    client.messages.create(
-        messaging_service_sid=messaging_service_sid,
-        body=message + str(otp),
-        to=phone_number
-    )
+# def send_OTP(account_sid, auth_token, messaging_service_sid, otp, phone_number, message):
+#     client = Client(account_sid, auth_token)
+#
+#     client.messages.create(
+#         messaging_service_sid=messaging_service_sid,
+#         body=message + str(otp),
+#         to=phone_number
+#     )

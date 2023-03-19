@@ -4,7 +4,9 @@ from click import confirm
 from flask import render_template, request, redirect, session, jsonify
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.recaptcha import validators
-from saleapp.security import send_OTP
+from twilio.rest import Client
+
+# from saleapp.security import send_OTP
 from select import error
 
 from saleapp import app, dao, admin, login, utils, account_sid, auth_token, messaging_service_sid, message
@@ -38,11 +40,94 @@ def login_admin():
 
     return redirect('/admin')
 
+
 # Gán đại chứ đếch có sdt của Hiếu ở đây :)
 # Với cái twilio nó die tiếp :)
-otp = "6969"
+otp = ""
 confirm_otp = ""
-numPhoneVN = "0979287149"
+numPhoneVN = ""
+
+
+# def get_otp():
+#     form = ContactForm()
+#     err_msg = ""
+#     if request.method.__eq__('POST'):
+#         if request.form.get('g-recaptcha-response'):
+#             numPhone = request.form['numPhone']
+#             numVN = "+84"
+#             global numPhoneVN
+#             numPhoneVN = numVN + numPhone[1: numPhone.__len__()]
+#
+#             global otp;
+#             otp = random.randint(100000, 999999)
+#             try:
+#                 send_OTP(account_sid=account_sid, auth_token=auth_token,
+#                          messaging_service_sid=messaging_service_sid, otp=otp,
+#                          message=message, phone_number=numPhoneVN)
+#                 # if check_send.sid:
+#                 return redirect('/register')
+#                 # else:
+#                 #     err_msg = "Hệ thống đang có lỗi! Vui lòng quay lại sau!"
+#             except:
+#                 err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
+#         else:
+#             err_msg = "Vui lòng xác minh mình là con người!"
+#
+#     return render_template("confirmOTP.html", form=form, err_msg=err_msg)
+#
+#
+# def register():
+#     err_msg = ''
+#     if request.method.__eq__('POST'):
+#         password = request.form['password']
+#         confirm = request.form['confirm']
+#         global confirm_otp;
+#         confirm_otp = request.form['confirm_otp']
+#         if password.__eq__(confirm):
+#             avatar = ''
+#             if request.files:
+#                 res = cloudinary.uploader.upload(request.files['avatar'])
+#                 avatar = res['secure_url']
+#
+#             if confirm_otp.__eq__(otp):
+#                 try:
+#                     dao.register(name=request.form['name'],
+#                                  username=request.form['username'],
+#                                  password=password,
+#                                  phonenumber=numPhoneVN,
+#                                  avatar=avatar)
+#
+#                     return redirect('/login')
+#                     # return confirm_otp + otp
+#                 except:
+#                     err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
+#             else:
+#                 err_msg = "Mã OTP không chính xác!"
+#         else:
+#             err_msg = 'Mật khẩu KHÔNG khớp!'
+#
+#     return render_template('register.html', err_msg=err_msg)
+
+def send_otp(phone_num):
+    account_sid = 'AC99204c3540a27bd83aede03e43b83312'
+    auth_token = '6bc48bbceb5f69c56d77af1bd1e4b8f7'
+    client = Client(account_sid, auth_token)
+    verification = client.verify \
+        .services('VAe815928dddcd3ab7340649abcc495092') \
+        .verifications \
+        .create(to=phone_num, channel='sms')
+    return verification
+
+
+def check_otp(phone_num, code):
+    account_sid = 'AC99204c3540a27bd83aede03e43b83312'
+    auth_token = '6bc48bbceb5f69c56d77af1bd1e4b8f7'
+    client = Client(account_sid, auth_token)
+    verification_check = client.verify \
+        .services('VAe815928dddcd3ab7340649abcc495092') \
+        .verification_checks \
+        .create(to=phone_num, code=code)
+    return verification_check
 
 
 def get_otp():
@@ -50,22 +135,24 @@ def get_otp():
     err_msg = ""
     if request.method.__eq__('POST'):
         if request.form.get('g-recaptcha-response'):
+            global numPhoneVN
             numPhone = request.form['numPhone']
             numVN = "+84"
-            global numPhoneVN
             numPhoneVN = numVN + numPhone[1: numPhone.__len__()]
-            global otp;
-            otp = random.randint(100000, 999999)
-            check_send = send_OTP(account_sid=account_sid, auth_token=auth_token,
-                                  messaging_service_sid=messaging_service_sid, otp=otp,
-                                  message=message, phone_number=numPhoneVN)
 
-            if check_send.ok:
-                return redirect('/register')
+            check = dao.check_phone_number_by_sdt(numPhoneVN)
+
+            if check:
+                try:
+                    sotp = send_otp(numPhoneVN)
+                    if sotp.status:
+                        return redirect('/register')
+                except:
+                    err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
+                else:
+                    err_msg = "Vui lòng xác minh mình là con người!"
             else:
-                err_msg = "Hệ thống đang có lỗi! Vui lòng quay lại sau!"
-        else:
-            err_msg = "Vui lòng xác minh mình là con người!"
+                err_msg = "Số điện thoại này đã được đăng ký!"
 
     return render_template("confirmOTP.html", form=form, err_msg=err_msg)
 
@@ -75,32 +162,36 @@ def register():
     if request.method.__eq__('POST'):
         password = request.form['password']
         confirm = request.form['confirm']
-        global confirm_otp;
+        global confirm_otp
         confirm_otp = request.form['confirm_otp']
         if password.__eq__(confirm):
             avatar = ''
             if request.files:
                 res = cloudinary.uploader.upload(request.files['avatar'])
                 avatar = res['secure_url']
+            try:
+                check = check_otp(numPhoneVN, confirm_otp)
+                if check.status.__eq__('approved'):
+                    try:
+                        dao.register(name=request.form['name'],
+                                     username=request.form['username'],
+                                     password=password,
+                                     phonenumber=numPhoneVN,
+                                     avatar=avatar)
 
-            if confirm_otp.__eq__(otp):
-                try:
-                    dao.register(name=request.form['name'],
-                                 username=request.form['username'],
-                                 password=password,
-                                 phonenumber=numPhoneVN,
-                                 avatar=avatar)
-
-                    return redirect('/login')
-                    # return confirm_otp + otp
-                except:
-                    err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
-            else:
-                err_msg = "Mã OTP không chính xác!"
+                        return redirect('/login')
+                        # return confirm_otp + otp
+                    except:
+                        err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
+                else:
+                    err_msg = "Mã OTP không chính xác!"
+            except:
+                err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
         else:
             err_msg = 'Mật khẩu KHÔNG khớp!'
 
     return render_template('register.html', err_msg=err_msg)
+
 
 
 @annonymous_user
