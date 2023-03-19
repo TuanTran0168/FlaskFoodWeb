@@ -1,7 +1,9 @@
 from builtins import print, type
+from hmac import new
 from random import random
 
 from cryptography.fernet import Fernet
+from six import u
 from twilio.rest import Client
 
 from saleapp.models import Category, Product, User, Receipt, ReceiptDetails, Comment
@@ -104,9 +106,11 @@ def save_comment(content, product_id):
 
     return c
 
+
 def load_phone_number():
     query = db.session.query(User.phonenumber)
     return query.all()
+
 
 def check_phone_number_by_sdt(phonenumber = None):
     query = db.session.query(User.phonenumber)
@@ -115,6 +119,20 @@ def check_phone_number_by_sdt(phonenumber = None):
             return False #Có tồn tại sdt rồi
     return True
 
+
+def update_password(phonenumber, new_password):
+    query = db.session.query(User.id, User.phonenumber)
+    new_password = str(hashlib.md5(new_password.strip().encode('utf-8')).hexdigest())
+
+    list_id_phonenum = query.all()
+    id_change_pass = 0
+    for l in list_id_phonenum:
+        if giai_ma_AES(l[1], MY_AES_KEY).__eq__(phonenumber):
+            id_change_pass = l[0]
+    if id_change_pass != 0:
+        user = User.query.filter_by(id = id_change_pass).first()
+        user.password = new_password
+        db.session.commit()
 
 
 
@@ -194,6 +212,9 @@ if __name__ == '__main__':
         print(check_phone_number_by_sdt("+84345809638"))
         print(check_phone_number_by_sdt("+84721782173123123123"))
         print(check_phone_number_by_sdt("+84123123123123"))
+
+        print(update_password("+84359505026"))
+
 
 
 

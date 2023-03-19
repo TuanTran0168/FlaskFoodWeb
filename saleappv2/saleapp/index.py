@@ -10,6 +10,8 @@ app.add_url_rule('/products/<int:product_id>', 'product-detail', controllers.det
 app.add_url_rule('/login-admin', 'login-admin', controllers.login_admin, methods=['post'])
 # app.add_url_rule('/confirmOTP', )
 app.add_url_rule('/confirmOTP', 'get_otp', controllers.get_otp, methods=['get', 'post'])
+app.add_url_rule('/confirmOTP_password', 'get_otp_password', controllers.get_otp_password, methods=['get', 'post'])
+app.add_url_rule('/change_password', 'change_pass', controllers.change_pass, methods=['get', 'post'])
 app.add_url_rule('/register', 'register', controllers.register, methods=['get', 'post'])
 app.add_url_rule('/login', 'login-user', controllers.login_my_user, methods=['get', 'post'])
 app.add_url_rule('/logout', 'logout', controllers.logout_my_user)

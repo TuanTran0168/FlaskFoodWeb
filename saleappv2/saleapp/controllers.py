@@ -143,12 +143,12 @@ def get_otp():
             check = dao.check_phone_number_by_sdt(numPhoneVN)
 
             if check:
-                # try:
+                try:
                     sotp = send_otp(numPhoneVN)
                     if sotp.status:
                         return redirect('/register')
-                # except:
-                #     err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau! - 1'
+                except:
+                    err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
 
             else:
                 err_msg = "Số điện thoại này đã được đăng ký!"
@@ -163,7 +163,7 @@ def register():
     if request.method.__eq__('POST'):
         password = request.form['password']
         confirm = request.form['confirm']
-        global confirm_otp
+        # global confirm_otp
         confirm_otp = request.form['confirm_otp']
         if password.__eq__(confirm):
             avatar = ''
@@ -344,6 +344,67 @@ def add_comment(product_id):
     })
 
 
+numPhoneVN_change_pass = ""
+
+def get_otp_password():
+    form = ContactForm()
+    err_msg = ""
+    if request.method.__eq__('POST'):
+        if request.form.get('g-recaptcha-response'):
+            global numPhoneVN_change_pass
+            numPhoneVN_change_pass = request.form['numPhone']
+            numVN = "+84"
+            numPhoneVN_change_pass = numVN + numPhoneVN_change_pass[1: numPhoneVN_change_pass.__len__()]
+
+            check = dao.check_phone_number_by_sdt(numPhoneVN_change_pass)
+
+            if check==False:
+                try:
+                    sotp = send_otp(numPhoneVN_change_pass)
+                    if sotp.status:
+                        # return numPhoneVN_change_pass + "   CC    " + numPhoneVN
+                        return redirect('/change_password')
+                except:
+                    err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
+            else:
+                err_msg = "ALO!"
+        else:
+            err_msg = "Vui lòng xác minh mình là con người!"
+
+    return render_template("confirmOTP_password.html", form=form, err_msg=err_msg)
+
+
+def change_pass():
+    form = ContactForm()
+    err_msg = ""
+    if request.method.__eq__('POST'):
+        password = request.form['password']
+        confirm = request.form['confirm']
+        # global confirm_otp
+        confirm_otp = request.form['confirm_otp']
+
+
+        if password.__eq__(confirm):
+            try:
+                check = check_otp(numPhoneVN_change_pass, confirm_otp)
+                if check.status.__eq__('approved'):
+                    try:
+                        dao.update_password(phonenumber=numPhoneVN_change_pass, new_password=password)
+
+                        return redirect('/login')
+                        # return confirm_otp + otp
+                    except:
+                        err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau! -9999'
+                else:
+                    err_msg = "Mã OTP không chính xác!"
+            except:
+                err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau! - 8888' + numPhoneVN_change_pass + " ALO "
+        else:
+            err_msg = 'Mật khẩu KHÔNG khớp!'
+
+
+    return render_template("change_password.html", form=form, err_msg=err_msg)
+
 class ContactForm(FlaskForm):
     recaptcha = RecaptchaField(validators=[validators.Recaptcha(message='Invalid reCAPTCHA.')])
 
@@ -352,4 +413,5 @@ if __name__ == '__main__':
     from saleapp import app
 
     with app.app_context():
-        pass
+        check = check_otp("+84388853371", 488596)
+        print(check.status)
