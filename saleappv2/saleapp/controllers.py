@@ -224,6 +224,7 @@ def logout_my_user():
 
 
 def cart():
+    form = ContactForm()
     # session['cart'] = {
     #     "1": {
     #         "id": "1",
@@ -239,7 +240,7 @@ def cart():
     #     }
     # }
 
-    return render_template('cart.html')
+    return render_template('cart.html', form=form)
 
 
 def add_to_cart():
@@ -362,7 +363,7 @@ def get_otp_password():
                 try:
                     sotp = send_otp(numPhoneVN_change_pass)
                     if sotp.status:
-                        # return numPhoneVN_change_pass + "   CC    " + numPhoneVN
+                        
                         return redirect('/change_password')
                 except:
                     err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
@@ -394,11 +395,11 @@ def change_pass():
                         return redirect('/login')
                         # return confirm_otp + otp
                     except:
-                        err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau! -9999'
+                        err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
                 else:
                     err_msg = "Mã OTP không chính xác!"
             except:
-                err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau! - 8888' + numPhoneVN_change_pass + " ALO "
+                err_msg = 'Hệ thống đang có lỗi! Vui lòng quay lại sau!'
         else:
             err_msg = 'Mật khẩu KHÔNG khớp!'
 

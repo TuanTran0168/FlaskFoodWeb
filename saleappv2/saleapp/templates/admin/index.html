@@ -2,6 +2,11 @@
 
 {% block body %}
 
+<head>
+    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
+</head>
+
 {% if current_user.is_authenticated %}
 
 <h1 class="text-center text-success">TRANG CHỦ QUẢN TRỊ BÁN HÀNG</h1>

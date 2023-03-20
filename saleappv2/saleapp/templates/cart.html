@@ -50,6 +50,9 @@
     <div class="pay-infor-right total-pay">
         {% if current_user.is_authenticated %}
         <input type="button" value="Thanh toán" onclick="pay()" class="btn btn-success"/>
+<!--        <div>-->
+<!--            {{ form.recaptcha() }}-->
+<!--        </div>-->
         {% else %}
         <p>Vui lòng <a href="/login?next=/cart">đăng nhập</a> để thanh toán!</p>
         {% endif %}

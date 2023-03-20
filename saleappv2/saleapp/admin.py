@@ -1,4 +1,4 @@
-from saleapp.models import Category, Product, Tag, User
+from saleapp.models import Category, Product, Tag, User, Receipt, ReceiptDetails
 from saleapp import db, app, dao
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
@@ -59,7 +59,9 @@ class MyAdminView(AdminIndexView):
 
 admin = Admin(app=app, name='QUẢN TRỊ BÁN HÀNG', template_mode='bootstrap4', index_view=MyAdminView())
 admin.add_view(ModelView(Category, db.session, name='Danh mục'))
-admin.add_view(ModelView(Tag, db.session, name='Tag'))
+# admin.add_view(ModelView(Tag, db.session, name='Tag'))
 admin.add_view(ProductView(Product, db.session, name='Sản phẩm'))
 admin.add_view(ModelView(User, db.session, name='Tài khoản'))
+admin.add_view(ModelView(Receipt, db.session, name='Hóa đơn'))
+# admin.add_view(ModelView(ReceiptDetails, db.session, name='Chi tiết hóa đơn'))
 admin.add_view(StatsView(name='Thống kê'))
