@@ -1,4 +1,4 @@
-from saleapp.models import Category, Product, Tag, User, Receipt, ReceiptDetails
+from saleapp.models import Category, Product, Tag, User, Receipt, ReceiptDetails, UserRole
 from saleapp import db, app, dao
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
@@ -7,6 +7,9 @@ from wtforms import TextAreaField
 from wtforms.widgets import TextArea
 from flask import request
 
+class AuthenticatedModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
 class CKTextAreaWidget(TextArea):
     def __call__(self, field, **kwargs):
@@ -58,10 +61,10 @@ class MyAdminView(AdminIndexView):
 
 
 admin = Admin(app=app, name='QUẢN TRỊ BÁN HÀNG', template_mode='bootstrap4', index_view=MyAdminView())
-admin.add_view(ModelView(Category, db.session, name='Danh mục'))
+admin.add_view(AuthenticatedModelView(Category, db.session, name='Danh mục'))
 # admin.add_view(ModelView(Tag, db.session, name='Tag'))
-admin.add_view(ProductView(Product, db.session, name='Sản phẩm'))
-admin.add_view(ModelView(User, db.session, name='Tài khoản'))
-admin.add_view(ModelView(Receipt, db.session, name='Hóa đơn'))
+admin.add_view(AuthenticatedModelView(Product, db.session, name='Sản phẩm'))
+admin.add_view(AuthenticatedModelView(User, db.session, name='Tài khoản'))
+admin.add_view(AuthenticatedModelView(Receipt, db.session, name='Hóa đơn'))
 # admin.add_view(ModelView(ReceiptDetails, db.session, name='Chi tiết hóa đơn'))
 admin.add_view(StatsView(name='Thống kê'))

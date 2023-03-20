@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
         password = str(hashlib.md5('123456'.encode('utf-8')).hexdigest())
         phonenumber = ma_hoa_AES("+84359505026", MY_AES_KEY)
-        phonenumber1 = ma_hoa_AES("+84345809638", MY_AES_KEY)
+        phonenumber1 = ma_hoa_AES("+8488888888", MY_AES_KEY)
         phonenumber2 = ma_hoa_AES("+8499999999", MY_AES_KEY)
 
         u = User(name='Tuấn Trần', username='admin', password=password,
